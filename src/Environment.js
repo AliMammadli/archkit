@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react'
 import { PMREMGenerator, CubeTextureLoader } from 'three'
-import { useThree, useLoader } from 'react-three-fiber'
+import { useThree, useLoader } from '@react-three/fiber'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { useAsset } from 'use-asset'
 
