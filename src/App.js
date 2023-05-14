@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useState, useRef } from "react"
-import { useResource } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Html, useGLTF, useTexture, useProgress } from "@react-three/drei"
-import { Controls, useControl } from 'react-three-gui'
 import { proxy, useSnapshot } from 'valtio'
 import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
@@ -618,21 +617,21 @@ const Model = (props) => {
 
 
 const AsyncModels = () => {
-    const posX = useControl('Pos X', { type: 'number', group: 'MESH', min: -20, max: 20 })
-    const posY = useControl('Pos Y', { type: 'number', group: 'MESH', min: -20, max: 20 })
-    const posZ = useControl('Pos Z', { type: 'number', group: 'MESH', min: -20, max: 20 })
+    // const posX = useControl('Pos X', { type: 'number', group: 'MESH', min: -20, max: 20 })
+    // const posY = useControl('Pos Y', { type: 'number', group: 'MESH', min: -20, max: 20 })
+    // const posZ = useControl('Pos Z', { type: 'number', group: 'MESH', min: -20, max: 20 })
 
     return (
-        <mesh position={[posX, posY, posZ]}>
+        <mesh>
             <Model />
         </mesh>
     )
 }
 
 const PointLight = () => {
-    const posX = useControl('Pos X', { type: 'number', group: 'LIGHT', value: 3.73, min: -20, max: 20 })
-    const posY = useControl('Pos Y', { type: 'number', group: 'LIGHT', value: 1.87, min: -20, max: 20 })
-    const posZ = useControl('Pos Z', { type: 'number', group: 'LIGHT', value: -4.13, min: -20, max: 20 })
+    const posX = 3.73 // useControl('Pos X', { type: 'number', group: 'LIGHT', value: 3.73, min: -20, max: 20 })
+    const posY = 1.87 // useControl('Pos Y', { type: 'number', group: 'LIGHT', value: 1.87, min: -20, max: 20 })
+    const posZ = -4.13 // useControl('Pos Z', { type: 'number', group: 'LIGHT', value: , min: -20, max: 20 })
 
     return (
         <>
@@ -897,7 +896,7 @@ const Picker = () => {
                         return (
                             <div onClick={() => (state.option = e.id, state.price = e.price)} style={styles.card} >
                                 {/* <div> */}
-                                    <img src={`/${e.id}_img.jpg`} style={styles.material} />
+                                <img src={`/${e.id}_img.jpg`} style={styles.material} />
                                 {/* </div> */}
                                 {/* <div style={styles.descripiton} >
                                     <h3 style={styles.details}>Collection: {e.name}</h3>
@@ -935,19 +934,14 @@ const Loader = () => {
 export const App = () => {
     return (
         <div style={{ position: 'fixed', height: '100vh', width: '100%' }} >
-            <Controls.Provider>
-                <Controls.Canvas
-                    onCreated={state => state.gl.setClearColor(0x262626, 1)}
-                >
-                    <PointLight />
-                    <Suspense fallback={<Loader />}>
-                        <AsyncModels />
-                        <Environment files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']} background={true} />
-                    </Suspense>
-                </Controls.Canvas>
-                {/* <Controls /> */}
-                <Picker />
-            </Controls.Provider>
+            <Canvas onCreated={state => state.gl.setClearColor(0x262626, 1)} >
+                <PointLight />
+                <Suspense fallback={<Loader />}>
+                    <AsyncModels />
+                    <Environment files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']} background={true} />
+                </Suspense>
+            </Canvas>
+            <Picker />
         </div>
     )
 }
