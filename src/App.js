@@ -6,6 +6,7 @@ import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
 import { Environment } from './Environment'
 
+
 const state = proxy({
     current: null,
     option: 'wallpaper_6',
@@ -640,6 +641,12 @@ const PointLight = () => {
     )
 }
 
+const AmbLight = () => {
+    return (
+        <ambientLight intensity={0.5} />
+    )
+}
+
 const Picker = () => {
     const snap = useSnapshot(state)
     const scrollRef = useRef(null)
@@ -936,9 +943,10 @@ export const App = () => {
         <div style={{ position: 'fixed', height: '100vh', width: '100%' }} >
             <Canvas onCreated={state => state.gl.setClearColor(0x262626, 1)} >
                 <PointLight />
+                <AmbLight />
                 <Suspense fallback={<Loader />}>
                     <AsyncModels />
-                    <Environment files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']} background={true} />
+                    {/* <Environment files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']} background={true} /> */}
                 </Suspense>
             </Canvas>
             <Picker />
