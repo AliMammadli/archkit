@@ -1,10 +1,9 @@
 import React, { Suspense, useEffect, useState, useRef } from "react"
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, PerspectiveCamera, Html, useGLTF, useTexture, useProgress } from "@react-three/drei"
+import { OrbitControls, PerspectiveCamera, Html, Sky, useGLTF, useTexture, useProgress } from "@react-three/drei"
 import { proxy, useSnapshot } from 'valtio'
 import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
-import { Environment } from './Environment'
 
 
 const state = proxy({
@@ -643,8 +642,12 @@ const PointLight = () => {
 
 const AmbLight = () => {
     return (
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.4} />
     )
+}
+
+const Env = () => {
+    return <Sky />
 }
 
 const Picker = () => {
@@ -899,9 +902,9 @@ const Picker = () => {
             <div style={styles.menu} >
                 <div style={{ display: 'flex', flexDirection: 'column' }} >
                     <div ref={scrollRef} ></div>
-                    {options.map((e) => {
+                    {options.map((e, index) => {
                         return (
-                            <div onClick={() => (state.option = e.id, state.price = e.price)} style={styles.card} >
+                            <div onClick={() => (state.option = e.id, state.price = e.price)} style={styles.card} key={index}>
                                 {/* <div> */}
                                 <img src={`/${e.id}_img.jpg`} style={styles.material} />
                                 {/* </div> */}
@@ -930,10 +933,11 @@ const Picker = () => {
 }
 
 const Loader = () => {
-    const { active, progress, errors, item, loaded, total } = useProgress()
+    const { progress } = useProgress()
+
     return (
         <Html center>
-            <h1 style={{ margin: 10, marginBottom: 0, color: '#FF5454' }} >{`${progress}%`}</h1>
+            <h1 style={{ margin: 10, marginBottom: 0, color: '#FF5454' }} >{`${progress.toFixed()}%`}</h1>
         </Html>
     )
 }
@@ -944,9 +948,9 @@ export const App = () => {
             <Canvas onCreated={state => state.gl.setClearColor(0x262626, 1)} >
                 <PointLight />
                 <AmbLight />
+                <Env />
                 <Suspense fallback={<Loader />}>
                     <AsyncModels />
-                    {/* <Environment files={['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']} background={true} /> */}
                 </Suspense>
             </Canvas>
             <Picker />
